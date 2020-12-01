@@ -1,0 +1,108 @@
+Lab11
+
+1. 
+
+student@ubuntu:~$ sudo apt install gcc-arm-linux-gnueabi
+
+2.
+student@ubuntu:~$ dpkg -L gcc-arm-linux-gnueabi
+
+
+###########
+/.
+/usr
+/usr/bin
+/usr/share
+/usr/share/doc
+/usr/share/doc/cpp-arm-linux-gnueabi
+/usr/share/man
+/usr/share/man/man1
+/usr/bin/arm-linux-gnueabi-gcc
+/usr/bin/arm-linux-gnueabi-gcc-ar
+/usr/bin/arm-linux-gnueabi-gcc-nm
+/usr/bin/arm-linux-gnueabi-gcc-ranlib
+/usr/bin/arm-linux-gnueabi-gcov
+/usr/bin/arm-linux-gnueabi-gcov-dump
+/usr/bin/arm-linux-gnueabi-gcov-tool
+/usr/share/doc/cpp-arm-linux-gnueabi/README.Bugs
+/usr/share/doc/gcc-arm-linux-gnueabi
+/usr/share/man/man1/arm-linux-gnueabi-gcc-ar.1.gz
+/usr/share/man/man1/arm-linux-gnueabi-gcc-nm.1.gz
+/usr/share/man/man1/arm-linux-gnueabi-gcc-ranlib.1.gz
+/usr/share/man/man1/arm-linux-gnueabi-gcc.1.gz
+/usr/share/man/man1/arm-linux-gnueabi-gcov-dump.1.gz
+/usr/share/man/man1/arm-linux-gnueabi-gcov-tool.1.gz
+/usr/share/man/man1/arm-linux-gnueabi-gcov.1.gz
+
+3. 
+
+   export ARCH=arm
+
+   export CROSS_COMPILE=arm-linux-gnueabi-
+
+
+student@ubuntu:~$ echo $ARCH
+arm
+student@ubuntu:~$ echo $CROSS_COMPILE
+arm-linux-gnueabi-
+
+4. Pour vérifier on va dans Desktop puis on tape arm- puis tab , puisque il trouve donc il existe 
+ student@ubuntu:~/Desktop$ arm-linux-gnueabi-
+
+5. 
+# Définition de variable 
+        CC=gcc
+        OBJ= max.o min.o var.o test.o
+        ifeq ($(DEBUG),yes)
+                CC_OPTIONS= -g -Wall
+        else
+                CC_OPTIONS=
+        endif
+
+install: My_binaire
+        mv My_binaire /home/student     
+My_binaire:     ${OBJ}
+        ${CROSS_COMPILE}${CC} ${CC_OPTIONS} ${OBJ} -o $@
+ifeq    ($(DEBUG),No)
+
+        @echo "Génération en mode Release"
+else
+
+        @echo "Génération en mode Debug"
+
+endif
+
+max.o:  max.c
+ 	${CROSS_COMPILE}${CC} ${CC_OPTIONS} -c $< -o $@
+min.o:  min.c
+        ${CROSS_COMPILE}${CC} ${CC_OPTIONS} -c $< -o $@
+var.o:  var.c
+        ${CROSS_COMPILE}${CC} ${CC_OPTIONS} -c $< -o $@
+test.o: test.c
+        ${CROSS_COMPILE}${CC} ${CC_OPTIONS} -c $^ -o $@
+        
+clean: 
+        rm ${OBJ}
+########################################
+
+6.
+
+student@ubuntu:~/Desktop/chahla/lab11$ make clean
+rm max.o min.o var.o test.o
+student@ubuntu:~/Desktop/chahla/lab11$ make
+arm-linux-gnueabi-gcc   -c max.c -o max.o
+arm-linux-gnueabi-gcc   -c min.c -o min.o
+arm-linux-gnueabi-gcc   -c var.c -o var.o
+arm-linux-gnueabi-gcc   -c test.c -o test.o
+arm-linux-gnueabi-gcc   max.o min.o var.o test.o -o My_binaire
+Génération en mode Debug
+mv My_binaire /home/student 	
+
+
+
+
+7.
+
+student@ubuntu:~/Desktop/chahla/lab11$ ./My_binaire
+bash: ./My_binaire: No such file or directory
+car le binaire qui a été créer est de type arm
